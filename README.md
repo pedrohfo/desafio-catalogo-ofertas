@@ -44,6 +44,12 @@ pip install -r requirements.txt
 
 O projeto utiliza PostgreSQL como banco de dados. Certifique-se de ter o PostgreSQL instalado e configurado.
 
+Crie um banco de dados no PostgreSQL
+```sql
+CREATE DATABASE catalogo_ofertas;
+```
+
+Configure as credenciais do banco de dados no arquivo settings.py:
 ```python
 DATABASES = {
     'default': {
@@ -63,7 +69,22 @@ python manage.py migrate
 ```
 
 ### 5. Coletar Dados dos Produtos
+
+Para coletar os dados dos produtos, execute o comando de scraping:
 ```bash
 python manage.py scrape_products
 ```
+Este comando irá coletar os produtos do site e salvá-los no banco de dados.
 
+
+### 6. Executar o Servidor
+
+Inicie o servidor de desenvolvimento do Django:
+```bash
+python manage.py runserver
+```
+
+Acesse o projeto no navegador em:
+```
+http://127.0.0.1:8000/products/
+```
