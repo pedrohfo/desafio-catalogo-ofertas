@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Produtos</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Filters section */
+        .filters {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .filters label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .filters input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .filters select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .filters button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .filters button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Products section */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .product a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .product a:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .filters {
+                padding: 15px;
+            }
+
+            .product-list {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Produtos</h1>
+
+    <!-- Filters section -->
+    <div class="filters">
+        <form method="get">
+            <label>
+                <input type="checkbox" name="frete_gratis" value="true" {% if request.GET.frete_gratis == 'true' %}checked{% endif %}>
+                Frete Grátis
+            </label>
+            <label>
+                <input type="checkbox" name="tipo_entrega" value="Full" {% if request.GET.tipo_entrega == 'Full' %}checked{% endif %}>
+                Tipo Entrega Full
+            </label>
+            <label>
+                Ordenar por:
+                <select name="sort_by">
+                    <option value="">Padrão</option>
+                    <option value="high_price" {% if request.GET.sort_by == 'high_price' %}selected{% endif %}>Maior Preço</option>
+                    <option value="low_price" {% if request.GET.sort_by == 'low_price' %}selected{% endif %}>Menor Preço</option>
+                    <option value="high_discount" {% if request.GET.sort_by == 'high_discount' %}selected{% endif %}>Maior Percentual de Desconto</option>
+                </select>
+            </label>
+            <button type="submit">Aplicar</button>
+        </form>
+    </div>
+
+    <!-- Products section -->
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product">
+                <img src="{{ product.imagem }}" alt="{{ product.nome }}">
+                <h2>{{ product.nome }}</h2>
+                <p><strong>Preço:</strong> R$ {{ product.preco }}</p>
+                <p><strong>Parcelamento:</strong> {{ product.parcelamento }}</p>
+                {% if product.preco_sem_desconto %}
+                    <p><strong>Preço sem Desconto:</strong> R$ {{ product.preco_sem_desconto }}</p>
+                {% endif %}
+                {% if product.percentual_desconto %}
+                    <p><strong>Percentual de Desconto:</strong> {{ product.percentual_desconto }}%</p>
+                {% endif %}
+                <p><strong>Tipo de Entrega:</strong> {{ product.tipo_entrega }}</p>
+                <p><strong>Frete Grátis:</strong> {{ product.frete_gratis|yesno:"Sim,Não" }}</p>
+                <a href="{{ product.link }}" target="_blank">Link do Produto</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Produtos</title>
+    <style>
+        .product {
+            margin-bottom: 30px; /* More space between products */
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            list-style-type: none;
+        }
+        .product img {
+            width: 200px; /* Bigger image */
+            height: auto;
+            border-radius: 8px;
+        }
+        .product h2 {
+            margin-top: 10px;
+            font-size: 1.5em;
+        }
+        .product p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .product a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .product a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Produtos</h1>
+    <form method="get">
+        <label>
+            <input type="checkbox" name="frete_gratis" value="true" {% if request.GET.frete_gratis == 'true' %}checked{% endif %}>
+            Frete Grátis
+        </label>
+        <label>
+            <input type="checkbox" name="tipo_entrega" value="Full" {% if request.GET.tipo_entrega == 'Full' %}checked{% endif %}>
+            Tipo Entrega Full
+        </label>
+        <label>
+            Ordenar por:
+            <select name="sort_by">
+                <option value="">Padrão</option>
+                <option value="high_price" {% if request.GET.sort_by == 'high_price' %}selected{% endif %}>Maior Preço</option>
+                <option value="low_price" {% if request.GET.sort_by == 'low_price' %}selected{% endif %}>Menor Preço</option>
+            </select>
+        </label>
+        <button type="submit">Aplicar</button>
+    </form>
+    <ul>
+        {% for product in products %}
+            <li class="product">
+                <img src="{{ product.imagem }}" alt="{{ product.nome }}">
+                <h2>{{ product.nome }}</h2>
+                <p><strong>Preço:</strong> R$ {{ product.preco }}</p>
+                <p><strong>Parcelamento:</strong> {{ product.parcelamento }}</p>
+                {% if product.preco_sem_desconto %}
+                    <p><strong>Preço sem Desconto:</strong> R$ {{ product.preco_sem_desconto }}</p>
+                {% endif %}
+                {% if product.percentual_desconto %}
+                    <p><strong>Percentual de Desconto:</strong> {{ product.percentual_desconto }}%</p>
+                {% endif %}
+                <p><strong>Tipo de Entrega:</strong> {{ product.tipo_entrega }}</p>
+                <p><strong>Frete Grátis:</strong> {{ product.frete_gratis|yesno:"Sim,Não" }}</p>
+                <a href="{{ product.link }}" target="_blank">Link do Produto</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html> -->
