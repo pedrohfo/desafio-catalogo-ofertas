@@ -69,6 +69,12 @@ python manage.py migrate
 ```
 
 ### 5. Coletar Dados dos Produtos
+Baixe o Chrome Driver mais atualizado e compatível com seu Chrome,
+e atualize o caminho do Chrome Driver no projeto, no arquivo scrape_products.py:
+
+```python
+        chrome_driver_path = r"C:\path\to\chromedriver.exe"
+```
 
 Para coletar os dados dos produtos, execute o comando de scraping:
 ```bash
